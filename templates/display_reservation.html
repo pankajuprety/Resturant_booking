@@ -1,0 +1,74 @@
+<html>
+    <head>
+        
+        <style>
+        * {
+          box-sizing: border-box;
+        }
+        
+        .column 
+        {
+        float: left;
+        padding: 10px;
+    
+        }
+
+        .left {
+        width: 65%;
+        }
+
+        .right {
+        width: 35%;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+        content: "";
+        display: table;
+        clear: both;
+        }
+
+        </style>
+    </head>
+
+    <body>        
+        <div class="row">
+          <div class="column right">
+            <h2>Search</h2>
+            <form method="get" action="">
+                    <label for="start_date">Start Date:</label>
+                    <input type="date" id="start_date" name="start_date">
+                    <br>
+                    <label for="table_name">Table_Name:</label>
+                    <select name="table_name" >
+                        <option value="" disabled selected hidden>All</option>
+                        {% for data in reservation %}
+                        <option value="{{data.table.name}}">{{data.table.name}}</option>
+                        {% endfor %}
+                    </select>                    
+                    <br>
+                    <button type="submit">Search</button>
+
+            </form>
+
+            <form method="get">
+              {% if user.is_authenticated %}
+              <input type="text" name="username" value="{{user}}" hidden>
+              <input type="submit" value="Show My Reservation">
+              {%endif%}
+            </form>
+
+
+          </div>
+          <div class="column left" >
+            <h1> Reservations are on: </h1>        
+            <ul>
+            {% for data in reservation %}
+                <li>Table_Name: {{data.table.name}}&emsp; &emsp;Seats_No: {{data.table.seats}}</li><br>
+                <li>Reservation From: {{ data.reservation_start }} to: {{data.reservation_end}}</li><br>
+            {% endfor %}
+            </ul>
+          </div>
+        </div>
+    </body>
+</html>

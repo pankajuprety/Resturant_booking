@@ -1,0 +1,16 @@
+<html>
+    <head></head>
+    <body>
+        <h2>{{ request.user|title}}</h2>
+        <h1>Welcome To Happy Eats</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" value="Reserve">
+        </form>
+        <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'view_reservation'%}">View Reservations</a>
+
+
+    </body>
+</html>

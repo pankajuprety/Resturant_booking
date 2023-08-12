@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 
 
+
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -28,15 +29,20 @@ class Table_Reservation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
     number_of_party = models.IntegerField(validators=[validate_less_than_99])
-    reservation_start = models.DateTimeField()
-    reservation_end = models.DateTimeField()
+    reservation_start = models.DateTimeField(null=False)
+    reservation_end = models.DateTimeField(null=False)
     special_order = models.TextField()
 
+    class Meta:
+        ordering = ["reservation_start"]
+
     def __str__(self):
-        date = self.reservation_start.date()
+        date_start = self.reservation_start.date()
+        date_end = self.reservation_end.date()
         start = self.reservation_start.time()
         end = self.reservation_end.time()
-        return str(date)+","+str(start)+" to "+str(end)
+        return str(date_start)+" to "+str(date_end)+",Timing: "+str(start)+" to "+str(end)
+    
 
     def clean(self):
         if self.table and self.number_of_party > self.table.seats:
@@ -54,7 +60,7 @@ class Table_Reservation(models.Model):
 
             if existing_reservations.exists():
                 raise ValidationError(
-                    "The table is already reserver for the specified date and time range"
+                    "The table is already reserved for the specified date and time range"
                 )
 
 class Category(models.Model):
