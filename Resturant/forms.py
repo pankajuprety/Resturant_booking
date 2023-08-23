@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import User,Table_Reservation
 from django.utils import timezone
-import datetime
 
 
 #Create form below
@@ -23,14 +22,12 @@ class Table_ReservationForm(forms.ModelForm):
     reservation_start = forms.DateTimeField(
         widget=forms.DateTimeInput(attrs= {'type' : 'datetime-local'}),
         input_formats = ['%Y-%m-%dT%H:%M'],
-        help_text= 'Format: YYYY-MM-DD HH:MM (24 hour)',
 
     )
 
     reservation_end = forms.DateTimeField(
         widget=forms.DateTimeInput(attrs= {'type' : 'datetime-local'}),
         input_formats = ['%Y-%m-%dT%H:%M'],
-        help_text= 'Format: YYYY-MM-DD HH:MM (24 hour)',
 
     )
 
@@ -44,7 +41,7 @@ class Table_ReservationForm(forms.ModelForm):
         #reserve_end_time = reservation_end.time()
 
 
-        now = datetime.datetime.now()        
+        now = timezone.now()        
         current_date = now.date()
         current_time  = now.time().replace(microsecond=0)
         reservation_start = reservation_start.replace(microsecond=0)
@@ -56,7 +53,7 @@ class Table_ReservationForm(forms.ModelForm):
                     raise forms.ValidationError("Resevation cannot be made in past time")
             if reservation_start.weekday() == 5:
                 raise forms.ValidationError("Reservations cannot be done on saturday")
-            if reservation_start.hour >= 23 or reservation_start.hour <= 8:
+            if reservation_start.hour >= 23 or reservation_start.hour < 8:
                 raise forms.ValidationError("Reservation is closed from 23hr to 8hr in morning")
             
         if reservation_end:

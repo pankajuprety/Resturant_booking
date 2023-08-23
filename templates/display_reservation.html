@@ -42,9 +42,13 @@
                     <label for="table_name">Table_Name:</label>
                     <select name="table_name" >
                         <option value="" disabled selected hidden>All</option>
-                        {% for data in reservation %}
-                        <option value="{{data.table.name}}">{{data.table.name}}</option>
-                        {% endfor %}
+
+                          {% for data in table %}
+
+                              <option value="{{data}}">{{data}}</option>
+
+                          {% endfor %}
+                                                
                     </select>                    
                     <br>
                     <button type="submit">Search</button>
@@ -63,10 +67,22 @@
           <div class="column left" >
             <h1> Reservations are on: </h1>        
             <ul>
-            {% for data in reservation %}
-                <li>Table_Name: {{data.table.name}}&emsp; &emsp;Seats_No: {{data.table.seats}}</li><br>
-                <li>Reservation From: {{ data.reservation_start }} to: {{data.reservation_end}}</li><br>
-            {% endfor %}
+            {% if reservation %}
+              {% for data in reservation %}
+                  <li>Table_Name: {{data.table.name}}&emsp;
+                     &emsp;Seats_No: {{data.table.seats}} &emsp;
+                     {% if data.user == user %}
+                      <a href="{% url 'update-reservation' data.pk %}">View</a>&emsp;<a href="{% url 'delete-reservation' data.pk %}">Delete</a>
+                     {%endif%}
+                   </li><br>
+  
+                  <li>Reservation From: {{ data.reservation_start }} 
+                    to: {{data.reservation_end}}
+                  </li><br>
+              {% endfor %}
+            {% else %}
+              <li>No Reservation Found</li>
+            {%endif%}
             </ul>
           </div>
         </div>

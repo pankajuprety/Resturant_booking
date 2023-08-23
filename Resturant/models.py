@@ -22,8 +22,13 @@ class Table(models.Model):
     seats = models.IntegerField(validators=[validate_less_than_99])
     name = models.CharField(max_length=255)
 
+    class Meta:
+        ordering = ["seats"]
+
     def __str__(self):
         return self.name +" seats:"+ str(self.seats)
+
+    
 
 class Table_Reservation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

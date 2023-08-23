@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Reservation (API)</title>
+</head>
+<body>
+    <h1>Create Reservation</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="table">Table:</label>
+        <select name="table" >
+
+              {% for data in data %}
+
+                  <option value="{{data.id}}">{{data}}</option>
+
+              {% endfor %}
+                                    
+        </select> <br>
+        <label for="number_of_party">Number of Party:</label>
+        <input type="number" name="number_of_party" required><br>
+        <label for="reservation_start">Start Time:</label>
+        <input type="datetime-local" name="reservation_start" required><br>
+        <label for="reservation_end">End Time:</label>
+        <input type="datetime-local" name="reservation_end" required><br>
+        <label for="special_order">Special Order:</label>
+        <textarea name="special_order" rows="4"></textarea><br>
+        <button type="submit">Create Reservation</button>
+    </form>
+</body>
+</html>
