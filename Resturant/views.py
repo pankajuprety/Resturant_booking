@@ -14,7 +14,7 @@ from django.utils import timezone
 
 aware_datetime = timezone.now()
 # Create your views here.
-class RegistrationView(FormView):
+class RegistrationView(FormView, LogoutView):
     template_name='registration.html'
     form_class = CustomRegistrationForm
     success_url = reverse_lazy('login')
@@ -64,6 +64,7 @@ class ViewReservationView(ListView):
     model = Table_Reservation
     template_name = 'display_reservation.html'
     context_object_name = 'reservation'
+    paginate_by = 10
 
     def get_queryset(self):
         start_date = self.request.GET.get("start_date")

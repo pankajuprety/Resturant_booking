@@ -1,0 +1,86 @@
+
+.carousel-inner img {
+        max-width: 60%;
+        height: 700;
+        display: block;
+        margin: 0 auto;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+}
+
+body {
+    background-image: url("restaurant.jpg");
+    background-size: cover; /* Scale the background image to cover the entire body */
+    background-repeat: no-repeat; /* Prevent background image from repeating */
+}
+
+div{
+    color:lawngreen;
+    font-weight: bold;
+    font-style: italic;
+}
+
+
+  
+.para{
+    background: linear-gradient(45deg, #f98e02d9, #f45a3fdc);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: white;
+    margin: 0;
+  }
+.col{
+    background: linear-gradient(45deg, #f88a46f3, #f7572fe7);
+    color: black;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 0;
+    border-bottom: 1px solid black;
+    }
+.btn-group div{
+  padding: 10px;
+}
+
+.navbar {
+  background-color: transparent;
+  backdrop-filter: blur(10px); /* Apply a blur effect to the content behind the navbar */
+}
+
+footer {
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  margin-top:5%; /* Add 10% spacing from the bottom */
+}
+
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="datetime-local"],
+select,
+textarea{
+  background-color: #eee;
+  justify-content: center;
+	border: none;
+	padding: 12px 15px;
+	margin: 8px 0;
+	border-radius: 5px;
+  width: 70%
+}
+
+
+
+  
+
+  
+  
+  
+  
+  
+  

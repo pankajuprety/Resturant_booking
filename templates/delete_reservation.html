@@ -1,5 +1,10 @@
+<br>
+<br>
+<div class="container" style="color: black; max-width: 800px; background: rgba(215, 214, 214, 0.772);">
+
 <form method="post">
     {% csrf_token %}
     <p>Are you sure you want to delete reservation of {{reservation}}</p>
-    <input type = 'submit' class = 'button' value="delete"/>
+    <input type = 'submit' class = 'btn btn-danger' value="delete"/>
 </form>
+</div>

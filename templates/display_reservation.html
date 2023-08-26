@@ -1,46 +1,64 @@
-<html>
-    <head>
-        
-        <style>
-        * {
-          box-sizing: border-box;
-        }
-        
-        .column 
-        {
-        float: left;
-        padding: 10px;
-    
-        }
+ {% extends 'main.html'%} 
+ {% load static %}  
+ {% block content %}
 
-        .left {
-        width: 65%;
-        }
+        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="{{menu.first.images.url}}" class="d-block mx-auto" alt="First Slide">
+            </div>
+            {% for items in menu|slice:"1:" %}
+            <div class="carousel-item">
+              <img src="{{items.images.url}}" class="d-block mx-auto" alt="Slide {{loop.index}}">
+            </div>
+            {% endfor %}
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+        <br>
 
-        .right {
-        width: 35%;
-        }
+        <div class="section-empty">
+          <div class="container content">
+              <div class="row">
+                  <div class="col-md-6 col-sm-12 text-center-sm">
+                    
+                      <div class="para">
+                        <h2>Our story</h2>
+                        <p>Sweet and tiny like a chocolate</p>
+                        <p>
+                          Nestled on a Birtamode Sanishare street, "Happy Tummy" stands as an enchanting haven in the heart of the city.
+                          With a warm rustic ambiance and a secret garden adorned with twinkling lights, it offers not just exquisite cuisine curated by Chef Uprety,
+                          but a symphony of tastes that tell stories of locally sourced ingredients and exotic spices. As the sun sets, diners embark on a culinary journey
+                          where each dish is a chapter, and every bite a memory, making "Happy Tummy" not just a restaurant, but a destination where time slows, connections deepen,
+                          and the senses come alive.
+                        </p>
+                      </div>
+                      <hr class="space s" />
+                      
+              </div>
+            </div>
+          </div>
+        </div>
 
-        /* Clear floats after the columns */
-        .row:after {
-        content: "";
-        display: table;
-        clear: both;
-        }
-
-        </style>
-    </head>
-
-    <body>        
         <div class="row">
           <div class="column right">
             <h2>Search</h2>
             <form method="get" action="">
+              <div class="col-lg-2 col-md-4 col-sm-6 col-12 custom-date">
                     <label for="start_date">Start Date:</label>
-                    <input type="date" id="start_date" name="start_date">
+                    <input type="date" id="start_date" name="start_date"class="form-control">
+                </div>
                     <br>
+                <div class="col-lg-2 col-md-4 col-sm-6 col-12">
                     <label for="table_name">Table_Name:</label>
-                    <select name="table_name" >
+                    <select name="table_name" class="form-control">
                         <option value="" disabled selected hidden>All</option>
 
                           {% for data in table %}
@@ -49,42 +67,180 @@
 
                           {% endfor %}
                                                 
-                    </select>                    
+                    </select>   
+                  </div>                 
                     <br>
-                    <button type="submit">Search</button>
+                    <button class='btn btn-secondary' type="submit"><i class="fa-solid fa-magnifying-glass">Search</i></button>
 
             </form>
 
             <form method="get">
               {% if user.is_authenticated %}
               <input type="text" name="username" value="{{user}}" hidden>
-              <input type="submit" value="Show My Reservation">
+              <input type="submit" value="Show My Reservation" class="btn btn-info">
               {%endif%}
             </form>
 
 
+          </div>              
+          
+          <h1> Reservations are on: </h1>   
+          {% if page_obj %}
+          <div class="text-center">
+            <div class="row row-divider">
+              <div class="col col-lg-2 col-md-4 col-sm-6 col-12"><h3>Table Name</h3></div>
+              <div class="col col-lg-2 col-md-4 col-sm-6 col-12"><h3>Seats Number</h3></div>
+              <div class="col col-lg-2 col-md-4 col-sm-6 col-12"><h3>Start Date</h3></div>
+              <div class="col col-lg-2 col-md-4 col-sm-6 col-12"><h3>End Date</h3></div>
+              <div class="col col-lg-2 col-md-4 col-sm-6 col-12"><h3>Action</h3></div>
+            </div>
+            {% for data in page_obj %}
+            <div class="row row-divider ">
+              <div class="col col-lg-2 col-md-4 col-sm-6 col-12">{{data.table.name}}</div>
+              <div class="col col-lg-2 col-md-4 col-sm-6 col-12">{{data.table.seats}}</div>
+              <div class="col col-lg-2 col-md-4 col-sm-6 col-12">{{data.reservation_start}}</div>
+              <div class="col col-lg-2 col-md-4 col-sm-6 col-12">{{data.reservation_end}}</div>
+                <div class="col col-lg-2 col-md-4 col-sm-6 col-12">
+                  {% if data.user == user %}
+                          <a href="{% url 'update-reservation' data.pk %}" class="btn btn-info">View</a>&emsp;
+                          <a href="{% url 'delete-reservation' data.pk %}" class="btn btn-danger">Delete</a>
+                  {% else %}
+                  Not Your Reservation
+                  {%endif%}
+                  
+                </div>
+            </div>
+            {%endfor%}
           </div>
-          <div class="column left" >
-            <h1> Reservations are on: </h1>        
-            <ul>
-            {% if reservation %}
-              {% for data in reservation %}
-                  <li>Table_Name: {{data.table.name}}&emsp;
-                     &emsp;Seats_No: {{data.table.seats}} &emsp;
-                     {% if data.user == user %}
-                      <a href="{% url 'update-reservation' data.pk %}">View</a>&emsp;<a href="{% url 'delete-reservation' data.pk %}">Delete</a>
-                     {%endif%}
-                   </li><br>
-  
-                  <li>Reservation From: {{ data.reservation_start }} 
-                    to: {{data.reservation_end}}
-                  </li><br>
-              {% endfor %}
-            {% else %}
-              <li>No Reservation Found</li>
-            {%endif%}
-            </ul>
+          <!-- Pagination links -->
+          <div class="pagination">
+            <span class="step-links">
+                {% if is_paginated %}
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                {% endif %}
+            </span>
           </div>
+        {% else %}
+        <h3 style="color:lawngreen ;"><i>No Reservation Found</i></h3>
+        {% endif %}
         </div>
-    </body>
-</html>
+        
+
+        <div class="section-empty">
+          <div class="container content">
+              <div class="title-base" style="text-align: center;">
+                  <hr />
+                  <h2>Our menu</h2>
+                  <p>Genuine and delicious</p>
+              </div>
+              <hr class="space s" />
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="list-items">
+                        {% for item in menu %}
+                          {% if item.category.type == "Freshen Me" %}
+                          <div class="list-item">
+                              <div class="row">
+                                  <div class="col-md-9">
+                                      <h3>{{item.item_name}}</h3>
+                                      <p>{{item.ingredients}}</p>
+                                  </div>
+                                  <div class="col-md-3">
+                                      <span>{{item.item_price}}</span>
+                                  </div>
+                              </div>
+                          </div>
+                            {% endif %}
+
+                          {% endfor %}
+                          
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="list-items">
+                        {% for item in menu %}
+                        {% if item.category.type == "Tighten Me"%}
+                          <div class="list-item">
+                              <div class="row">
+                                  <div class="col-md-9">
+                                    <h3>{{item.item_name}}</h3>
+                                    <p>{{item.ingredients}}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <span>{{item.item_price}}</span>
+                                  </div>
+                              </div>
+                          </div>
+                          {%endif%}
+
+                          {%endfor%}
+                          
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              
+          </div>
+      
+
+          <div class="section-empty"style="margin-top:10%;">
+            <div class="container content">
+                <div class="row">
+                  <hr class="space xs hidden-sm" />
+                  <hr />
+                    <div class="col-md-2 col-sm-12 text-center-sm">
+                        
+                        <div class="title-base text-left text-center-sm">
+                            
+                            <h2>Hours</h2>
+                            <p>Our open schedules</p>
+                        </div>
+                    </div>
+                    <div class="col-md-9 col-sm-12 text-center-sm">
+                      <table class="table table-hover" style="width:900 ;">
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Monday</th>
+                                <th>Tuesday</th>
+                                <th>Wednesday</th>
+                                <th>Thurdsay</th>
+                                <th>Friday</th>
+                                <th>Saturday</th>
+                                <th>Sunday</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Reservation Time</th>
+                                <td>8am - 11pm</td>
+                                <td>8am - 11pm</td>
+                                <td>8am - 11pm</td>
+                                <td>8am - 11pm</td>
+                                <td>8am - 11pm</td>
+                                <td>Closed</td>
+                                <td>8am - 11pm</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        
+
+
+{%endblock content%}
